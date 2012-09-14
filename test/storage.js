@@ -63,7 +63,53 @@ describe('Storage', function() {
       }
     })
   })
-  describe('perform a request', function() {
+  describe.skip('perform a bucket request', function() {
+    var bkt = 'newBkt'
+    describe('PUT', function() {
+      after(function(done) {
+        storage(bkt).del(function(err, res, body) {
+          done()
+        })
+      })
+      it('should create a bucket', function(done) {
+        storage(bkt).put(function(err, res, body) {
+          console.log(res.headers)
+          console.log(body)
+          assert.equal(res.statusCode, 200)
+          done()
+        })
+      })
+    })
+    describe('DELETE', function() {
+      var bkt = 'newBkt'
+      before(function(done) {
+        storage(bkt).put(function(err, res, body) {
+          console.log(res.headers)
+          console.log(body)
+          done()
+        })
+      })
+      it('should delete a bucket', function(done) {
+        storage(bkt).del(function(err, res, body) {
+          assert.equal(res.statusCode, 200)
+          done()
+        })
+      })
+    })
+    describe('GET', function() {
+      var bkt = 'newBkt'
+      it('should get the bucket list', function(done) {
+        console.log(storage(bkt).get(function(err, res, body) {
+          assert(!err)
+          assert.equal(res.statusCode, 200)
+          assert.equal(res.headers['content-type'], 'application/json')
+          console.log(JSON.parse(body))
+          done()
+        }))
+      })
+    })
+  })
+  describe('perform a object request', function() {
     var demo = fs.readFileSync(__filename)
     var hash = md5(demo)
 
@@ -154,6 +200,11 @@ describe('Storage', function() {
         }, function(err, res, body) {
           done()
         }))
+      })
+      after(function(done) {
+        storage(bkt, obj).del(function(err, res, body) {
+          done()
+        })
       })
       it('should get meta of an object.', function(done) {
         storage(bkt, obj).head(function(err, res, body) {
