@@ -1,3 +1,10 @@
 language: node_js
 node_js:
   - "0.8"
+env:
+  - BAIDU_ACCESS_KEY="A2e5998eef27dfa44e7f3687b8273a8b"
+  - BAIDU_SECRET_KEY="EAed71d8d8d2539e729fea6af2e5fac9"
+branches:
+  only:
+    - master
+    - develop
