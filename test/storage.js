@@ -5,29 +5,26 @@ var md5 = function(str) {
 }
 
 var util, storage, timeout = 30000;
+var key = process.env.BAIDU_ACCESS_KEY
+var secret = process.env.BAIDU_SECRET_KEY
+var util = require('../lib/util')
 
 describe('Storage', function() {
   var bkt = 'another'
-  it('should success when require', function() {
-    assert.doesNotThrow(function() {
-      util = require('../lib/util')
-      storage = require('../lib/storage')
-    }, null, 'Please check your env setting, it should contain these variables:\n process.env.BAIDU_ACCESS_KEY\n process.env.BAIDU_SECRET_KEY\n process.env.BAIDU_HOST')
-  })
+  var storage = require('../lib/index').createClient({
+      app_key: key
+    , app_secret: secret
+  }).storage
   describe('Signature', function() {
     // verify them from http://developer.baidu.com/bae/bcs/key/sign/
     it('should generate a signature from giving method, bucket and object', function() {
-      assert.equal(util.sign('PUT', bkt, '/'), 'MBO:A2e5998eef27dfa44e7f3687b8273a8b:cb2836%2BtlgXn9EhUYfB%2FseY4dPk%3D')
-      assert.equal(util.sign('GET', bkt, '/'), 'MBO:A2e5998eef27dfa44e7f3687b8273a8b:X%2Brr4%2F1ORVCPMGYNitO20PWAuYQ%3D')
+      assert.equal(util.sign(key, secret, 'PUT', bkt, '/'), 'MBO:A2e5998eef27dfa44e7f3687b8273a8b:cb2836%2BtlgXn9EhUYfB%2FseY4dPk%3D')
+      assert.equal(util.sign(key, secret, 'GET', bkt, '/'), 'MBO:A2e5998eef27dfa44e7f3687b8273a8b:X%2Brr4%2F1ORVCPMGYNitO20PWAuYQ%3D')
     })
   })
   describe('Verify arguments', function() {
     it('should fail when missing arguments', function() {
-      [
-          [],
-        , ['']
-        , ['', '/']
-      ].forEach(function(arg) {
+      [[], [''], ['', '/']].forEach(function(arg) {
         assert.throws(function() {
           storage.apply(null, arg)
         })

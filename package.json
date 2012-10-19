@@ -4,12 +4,12 @@
   , "dependencies": {
         "request": ""
     }
-  , "main": "./lib/index"
+  , "main": "./lib/"
   , "engines": {
       "node": "0.8.x"
     , "npm": "1.1.x"
     }
   , "scripts": {
-      "test": "mocha -t 30000"
+      "test": "mocha -R spec -t 300000"
     }
 }
