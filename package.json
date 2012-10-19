@@ -4,12 +4,15 @@
   , "dependencies": {
         "request": ""
     }
+  , "devDependencies": {
+        "mocha": ""
+    }
   , "main": "./lib/"
   , "engines": {
       "node": "0.8.x"
     , "npm": "1.1.x"
     }
   , "scripts": {
-      "test": "mocha -R spec -t 300000"
+      "test": "./node_modules/.bin/mocha -R spec -t 300000"
     }
 }
